@@ -1,0 +1,22 @@
+export const simonLevels = [
+  { level: 1, pattern: ['red'] },
+  { level: 2, pattern: ['red', 'blue'] },
+  { level: 3, pattern: ['red', 'blue', 'yellow'] },
+  { level: 4, pattern: ['red', 'blue', 'yellow', 'yellow'] },
+  { level: 5, pattern: ['red', 'blue', 'yellow', 'yellow', 'green'] },
+  { level: 6, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow'] },
+  { level: 7, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow', 'red'] },
+  { level: 8, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow', 'red', 'green'] },
+  { level: 9, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow', 'red', 'green', 'blue'] },
+  { level: 10, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow', 'red', 'green', 'blue', 'yellow'] },
+  { level: 11, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow', 'red', 'green', 'blue', 'yellow', 'red'] },
+  { level: 12, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow', 'red', 'green', 'blue', 'yellow', 'red', 'green'] },
+  { level: 13, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow', 'red', 'green', 'blue', 'yellow', 'red', 'green', 'yellow'] },
+  { level: 14, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow', 'red', 'green', 'blue', 'yellow', 'red', 'green', 'yellow', 'blue'] },
+  { level: 15, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow', 'red', 'green', 'blue', 'yellow', 'red', 'green', 'yellow', 'blue', 'green'] },
+  { level: 16, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow', 'red', 'green', 'blue', 'yellow', 'red', 'green', 'yellow', 'blue', 'green', 'red'] },
+  { level: 17, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow', 'red', 'green', 'blue', 'yellow', 'red', 'green', 'yellow', 'blue', 'green', 'red', 'blue'] },
+  { level: 18, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow', 'red', 'green', 'blue', 'yellow', 'red', 'green', 'yellow', 'blue', 'green', 'red', 'blue', 'green'] },
+  { level: 19, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow', 'red', 'green', 'blue', 'yellow', 'red', 'green', 'yellow', 'blue', 'green', 'red', 'blue', 'green', 'yellow'] },
+  { level: 20, pattern: ['red', 'blue', 'yellow', 'yellow', 'green', 'yellow', 'red', 'green', 'blue', 'yellow', 'red', 'green', 'yellow', 'blue', 'green', 'red', 'blue', 'green', 'yellow', 'red'] }
+];

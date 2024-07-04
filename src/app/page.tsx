@@ -1,14 +1,15 @@
-"use client"
+"use client";
 
-import OurComp from '@/components/OurComp';
-import SimpleSimonLayout from '@/components/Quadrant';
-import { useState, useEffect } from 'react';
+import OurComp from "@/components/OurComp";
+import SimpleSimonLayout from "@/components/Quadrant";
+import { useState, useEffect } from "react";
+import {simonLevels} from "../pattern/pattern";
 
 const sounds = [
   "https://cdn.freecodecamp.org/curriculum/take-home-projects/simonSound1.mp3",
   "https://cdn.freecodecamp.org/curriculum/take-home-projects/simonSound2.mp3",
   "https://cdn.freecodecamp.org/curriculum/take-home-projects/simonSound3.mp3",
-  "https://cdn.freecodecamp.org/curriculum/take-home-projects/simonSound4.mp3"
+  "https://cdn.freecodecamp.org/curriculum/take-home-projects/simonSound4.mp3",
 ];
 
 export default function Home() {
@@ -27,16 +28,37 @@ export default function Home() {
       audioElements[index].play();
     }
     setTimeout(() => setActiveIndex(null), 300); // reset after 300ms
-  }
+  };
 
   const getColor = (index: number) => {
-    const colors = ["bg-red-700", "bg-blue-700", "bg-green-700", "bg-yellow-700"];
-    const activeColors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500"];
+    const colors = [
+      "bg-red-700",
+      "bg-blue-700",
+      "bg-green-700",
+      "bg-yellow-700",
+    ];
+    const activeColors = [
+      "bg-red-500",
+      "bg-blue-500",
+      "bg-green-500",
+      "bg-yellow-500",
+    ];
     return activeIndex === index ? activeColors[index] : colors[index];
-  }
+  };
 
   return (
     // <SimpleSimonLayout />
-    <OurComp />
+    <div className="w-screen h-screen">
+      <OurComp />
+      <div className="flex flex-row justify-around">
+        <div>QUIT</div>
+        <div>
+          Your Score <span>1</span>
+        </div>
+        <div>
+          Highest Score <span>1</span>
+        </div>
+      </div>
+    </div>
   );
 }
