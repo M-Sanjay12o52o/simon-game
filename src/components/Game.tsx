@@ -1,6 +1,7 @@
 "use client"
 
 import { simonLevels } from '@/pattern/pattern';
+import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 
 const sounds = [
@@ -10,13 +11,15 @@ const sounds = [
     "https://cdn.freecodecamp.org/curriculum/take-home-projects/simonSound4.mp3"
 ];
 
-export default function OurComp() {
+export default function Game() {
     const [audioElements, setAudioElements] = useState<HTMLAudioElement[]>([]);
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
     const [shadowColor, setShadowColor] = useState("shadow-black");
     const [sequence, setSequence] = useState<Object[]>([simonLevels]);
     const [automatic, setAutomatic] = useState(false);
     const [currentLevel, setCurrentLevel] = useState<Number | undefined>();
+    const [score, setScore] = useState<Number | undefined>(0);
+    const [highestScore, setHighestScore] = useState<Number | undefined>(0);
 
     const shadowColors = ["shadow-red-500", "shadow-blue-500", "shadow-green-500", "shadow-yellow-500"];
 
@@ -53,25 +56,39 @@ export default function OurComp() {
     }
 
     useEffect(() => {
-        if (automatic) {
-            let levelIndex = 0;
-            const playSequence = () => {
-                const currentLevel = simonLevels[levelIndex];
-                if (currentLevel) {
-                    setCurrentLevel(currentLevel.level);
-                    currentLevel.pattern.forEach((color, index) => {
-                        setTimeout(() => {
-                            handleClick(color === 'red' ? 0 : color === 'blue' ? 1 : color === 'green' ? 2 : 3);
-                        }, index * 1000); // Play each color after 1 second
-                    });
-                    levelIndex++;
-                    if (levelIndex < simonLevels.length) {
-                        setTimeout(playSequence, currentLevel.pattern.length * 1000); // Move to the next level after the current sequence
-                    }
+        let levelIndex = 0;
+        let timeoutIds: any = [];
+        console.log("timeoutIds: ", timeoutIds)
+
+        const playSequence = () => {
+            if (!automatic) return; // Stop the sequence if automatic is false
+            const currentLevel = simonLevels[levelIndex];
+            console.log("timeoutIds inside playSequence: ", timeoutIds)
+
+            if (currentLevel) {
+                setCurrentLevel(currentLevel.level);
+                currentLevel.pattern.forEach((color, index) => {
+                    const timeoutId = setTimeout(() => {
+                        handleClick(color === 'red' ? 0 : color === 'blue' ? 1 : color === 'green' ? 2 : 3);
+                    }, index * 1000); // Play each color after 1 second
+                    timeoutIds.push(timeoutId); // Store the timeoutId to clear later
+                });
+                levelIndex++;
+                if (levelIndex < simonLevels.length) {
+                    console.log("simonLevels.length: ", simonLevels.length)
+                    const timeoutId = setTimeout(playSequence, currentLevel.pattern.length * 1000); // Move to the next level after the current sequence
+                    timeoutIds.push(timeoutId); // Store the timeoutId to clear later
                 }
-            };
+            }
+        };
+
+        if (automatic) {
             playSequence();
         }
+
+        return () => {
+            timeoutIds.forEach((timeoutId: any) => clearTimeout(timeoutId)); // Clear all timeouts when the effect is cleaned up
+        };
     }, [automatic]);
 
     return (
@@ -115,12 +132,14 @@ export default function OurComp() {
                 ></div>
             </div>
             <div className="bg-red-700 flex flex-row justify-around w-full absolute bottom-0">
-                <div>QUIT</div>
                 <div>
-                    Your Score <span>1</span>
+                    <Link href={"/"}>QUIT</Link>
                 </div>
                 <div>
-                    Highest Score <span>1</span>
+                    Your Score <span>{score?.toString()}</span>
+                </div>
+                <div>
+                    Highest Score <span>{highestScore?.toString()}</span>
                 </div>
             </div>
         </div>
