@@ -29,7 +29,6 @@ export default function Game() {
     }, []);
 
     const handleClick = (index: number) => {
-        console.log(index);
         setActiveIndex(index);
 
         // Update shadow color
@@ -58,12 +57,10 @@ export default function Game() {
     useEffect(() => {
         let levelIndex = 0;
         let timeoutIds: any = [];
-        console.log("timeoutIds: ", timeoutIds)
 
         const playSequence = () => {
             if (!automatic) return; // Stop the sequence if automatic is false
             const currentLevel = simonLevels[levelIndex];
-            console.log("timeoutIds inside playSequence: ", timeoutIds)
 
             if (currentLevel) {
                 setCurrentLevel(currentLevel.level);
@@ -75,7 +72,6 @@ export default function Game() {
                 });
                 levelIndex++;
                 if (levelIndex < simonLevels.length) {
-                    console.log("simonLevels.length: ", simonLevels.length)
                     const timeoutId = setTimeout(playSequence, currentLevel.pattern.length * 1000); // Move to the next level after the current sequence
                     timeoutIds.push(timeoutId); // Store the timeoutId to clear later
                 }
@@ -96,8 +92,9 @@ export default function Game() {
             <button className='absolute top-0
              w-36 h-12 rounded-md bg-red-700' onClick={automate}>{automatic ? "Automatic" : "SetAutomatic"}
             </button>
-            <div className='absolute top-0 left-0 text-white'>
-                Current Level: {currentLevel?.toString()}
+            <div className="absolute top-4 left-4 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg p-3 shadow-lg border-2 border-yellow-400 transform hover:scale-105 transition-all duration-300">
+                <div className="text-yellow-300 text-xs uppercase tracking-wide font-bold mb-1">Current Level</div>
+                <div className="text-white text-3xl font-extrabold">{currentLevel?.toString()}</div>
             </div>
             <div className={`relative w-96 h-96 rounded-full bg-gray-9000 shadow-2xl overflow-hidden ${shadowColor}`}>
                 <div
