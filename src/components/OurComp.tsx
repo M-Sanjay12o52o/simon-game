@@ -1,5 +1,6 @@
 "use client"
 
+import { simonLevels } from '@/pattern/pattern';
 import React, { useState, useEffect } from 'react';
 
 const sounds = [
@@ -12,9 +13,10 @@ const sounds = [
 export default function OurComp() {
     const [audioElements, setAudioElements] = useState<HTMLAudioElement[]>([]);
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
-    const [shadowColor, setShadowColor] = useState("shadow-black"); // Initial shadow color
-
-    console.log("shadowColor", shadowColor);
+    const [shadowColor, setShadowColor] = useState("shadow-black");
+    const [sequence, setSequence] = useState<Object[]>([simonLevels]);
+    const [automatic, setAutomatic] = useState(false);
+    const [currentLevel, setCurrentLevel] = useState<Number | undefined>();
 
     const shadowColors = ["shadow-red-500", "shadow-blue-500", "shadow-green-500", "shadow-yellow-500"];
 
@@ -46,9 +48,41 @@ export default function OurComp() {
         return activeIndex === index ? activeColors[index] : colors[index];
     }
 
+    const automate = () => {
+        setAutomatic(!automatic);
+    }
+
+    useEffect(() => {
+        if (automatic) {
+            let levelIndex = 0;
+            const playSequence = () => {
+                const currentLevel = simonLevels[levelIndex];
+                if (currentLevel) {
+                    setCurrentLevel(currentLevel.level);
+                    currentLevel.pattern.forEach((color, index) => {
+                        setTimeout(() => {
+                            handleClick(color === 'red' ? 0 : color === 'blue' ? 1 : color === 'green' ? 2 : 3);
+                        }, index * 1000); // Play each color after 1 second
+                    });
+                    levelIndex++;
+                    if (levelIndex < simonLevels.length) {
+                        setTimeout(playSequence, currentLevel.pattern.length * 1000); // Move to the next level after the current sequence
+                    }
+                }
+            };
+            playSequence();
+        }
+    }, [automatic]);
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-800">
-            <div className={`relative w-96 h-96 rounded-full bg-gray-900 shadow-2xl overflow-hidden ${shadowColor}`}>
+            <button className='absolute top-0
+             w-36 h-12 rounded-md bg-red-700' onClick={automate}>{automatic ? "Automatic" : "SetAutomatic"}
+            </button>
+            <div className='absolute top-0 left-0 text-white'>
+                Current Level: {currentLevel?.toString()}
+            </div>
+            <div className={`relative w-96 h-96 rounded-full bg-gray-9000 shadow-2xl overflow-hidden ${shadowColor}`}>
                 <div
                     className={`absolute w-40 h-40 ${getColor(0)} top-2 left-2 transform hover:scale-110 transition-transform duration-300 shadow-lg
                     shadow-red-500
@@ -79,6 +113,15 @@ export default function OurComp() {
                     `}
                     onClick={() => handleClick(3)}
                 ></div>
+            </div>
+            <div className="bg-red-700 flex flex-row justify-around w-full absolute bottom-0">
+                <div>QUIT</div>
+                <div>
+                    Your Score <span>1</span>
+                </div>
+                <div>
+                    Highest Score <span>1</span>
+                </div>
             </div>
         </div>
     );
