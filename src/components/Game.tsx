@@ -18,8 +18,12 @@ export default function Game() {
     const [sequence, setSequence] = useState<Object[]>([simonLevels]);
     const [automatic, setAutomatic] = useState(false);
     const [currentLevel, setCurrentLevel] = useState<Number | undefined>();
-    const [score, setScore] = useState<Number | undefined>(0);
+    const [score, setScore] = useState<number>(0);
     const [highestScore, setHighestScore] = useState<Number | undefined>(0);
+    const [start, setStart] = useState(false);
+    const [userInput, setUserInput] = useState<number[]>([]);
+
+    console.log("userInput", userInput);
 
     const shadowColors = ["shadow-red-500", "shadow-blue-500", "shadow-green-500", "shadow-yellow-500"];
 
@@ -42,6 +46,10 @@ export default function Game() {
             setActiveIndex(null);
             setShadowColor("shadow-black");
         }, 300); // reset after 300ms
+
+        if (start) {
+            setUserInput(prevInput => [...prevInput, index]);;
+        }
     }
 
     const getColor = (index: number) => {
@@ -52,6 +60,23 @@ export default function Game() {
 
     const automate = () => {
         setAutomatic(!automatic);
+    }
+
+    const startGame = () => {
+        setStart(!start);
+    }
+
+    const playLevel = (levelIndex: number) => {
+        const currentLevel = simonLevels[levelIndex];
+
+        if (currentLevel) {
+            setCurrentLevel(currentLevel.level);
+            currentLevel.pattern.forEach((color, index) => {
+                const timeoutId = setTimeout(() => {
+                    handleClick(color === 'red' ? 0 : color === 'blue' ? 1 : color === 'green' ? 2 : 3);
+                }, index * 1000)
+            })
+        }
     }
 
     useEffect(() => {
@@ -87,11 +112,45 @@ export default function Game() {
         };
     }, [automatic]);
 
+    useEffect(() => {
+        if (start) {
+            playLevel(0);;
+        }
+    }, [start])
+
+    useEffect(() => {
+        if (start && userInput.length === simonLevels[0].pattern.length) {
+            compareUserInput();
+        }
+    }, [userInput])
+
+    const compareUserInput = () => {
+        const currentLevelPattern = simonLevels[0].pattern.map(color =>
+            color === 'red' ? 0 : color === 'blue' ? 1 : color === 'green' ? 2 : 3
+        )
+
+        const isMatch = userInput.every((input, index) => input === currentLevelPattern[index]);
+
+        if (isMatch) {
+            setScore(prevScore => prevScore + 1);
+        } else {
+            console.log("User input does not match the pattern");
+        }
+
+        setUserInput([]);
+    }
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-800">
-            <button className='absolute top-0
+            <div className='flex flex-row'>
+                {/* <button className='absolute top-0
              w-36 h-12 rounded-md bg-red-700' onClick={automate}>{automatic ? "Automatic" : "SetAutomatic"}
-            </button>
+                </button> */}
+                <button className='absolute top-0
+            w-36 h-12 rounded-md bg-red-700' onClick={startGame}>
+                    {start ? "Stop" : "Start"}
+                </button>
+            </div>
             <div className="absolute top-4 left-4 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg p-3 shadow-lg border-2 border-yellow-400 transform hover:scale-105 transition-all duration-300">
                 <div className="text-yellow-300 text-xs uppercase tracking-wide font-bold mb-1">Current Level</div>
                 <div className="text-white text-3xl font-extrabold">{currentLevel?.toString()}</div>
